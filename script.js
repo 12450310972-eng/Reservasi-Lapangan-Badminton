@@ -79,7 +79,7 @@
         });
 
         // Update WhatsApp number (ganti dengan nomor Anda)
-        const whatsappNumber = '6285183220322'; // Format: 62xxxxx
+        const whatsappNumber = '6285119008900'; // Format: 62xxxxx
         document.querySelectorAll('a[href*="wa.me"]').forEach(link => {
             const currentHref = link.getAttribute('href');
             link.setAttribute('href', currentHref.replace('6281234567890', whatsappNumber));
@@ -218,34 +218,42 @@
             return 'Rp ' + amount.toLocaleString('id-ID');
         }
 
-        // Form submission
-        document.getElementById('reservationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+       // ... (Bagian atas script.js tetap sama)
 
-            if (!document.getElementById('selectedCourt').value) {
-                alert('Silakan pilih lapangan terlebih dahulu!');
-                return;
-            }
+// Ganti seluruh block Form submission di script.js Anda dengan kode di bawah ini:
+document.getElementById('reservationForm').addEventListener('submit', function(e) {
+    e.preventDefault();
 
-            if (!document.getElementById('selectedTime').value) {
-                alert('Silakan pilih jam terlebih dahulu!');
-                return;
-            }
+    // 1. Ambil data dari formulir
+    const whatsappNumber = '6285119008900'; // Ganti dengan nomor WhatsApp Anda
+    
+    // Validasi Lapangan dan Jam
+    if (!document.getElementById('selectedCourt').value) {
+        alert('Silakan pilih lapangan terlebih dahulu!');
+        return;
+    }
 
-            const formData = {
-                court: document.getElementById('selectedCourt').value,
-                date: document.getElementById('date').value,
-                day: document.getElementById('day').value,
-                time: document.getElementById('selectedTime').value,
-                duration: document.getElementById('duration').value,
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
-                notes: document.getElementById('notes').value,
-                total: document.getElementById('totalPrice').textContent
-            };
+    if (!document.getElementById('selectedTime').value) {
+        alert('Silakan pilih jam terlebih dahulu!');
+        return;
+    }
 
-            const message = `
+    // 2. Kumpulkan data untuk pesan WhatsApp
+    const formData = {
+        court: document.getElementById('selectedCourt').value,
+        date: document.getElementById('date').value,
+        day: new Date(document.getElementById('date').value).toLocaleDateString('id-ID', { weekday: 'long' }),
+        time: document.getElementById('selectedTime').value,
+        duration: document.getElementById('duration').value,
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        notes: document.getElementById('notes').value,
+        total: document.getElementById('totalPrice').textContent // Ambil teks harga
+    };
+
+    // 3. Susun pesan WhatsApp
+    const message = `
 🏸 *RESERVASI LAPANGAN BADMINTON*
 ━━━━━━━━━━━━━━━━━━━
 
@@ -265,17 +273,26 @@
 💰 *Total Pembayaran:*
 ${formData.total}
 
-${formData.notes ? `📝 *Catatan:*\n${formData.notes}` : ''}
+${formData.notes ? `📝 *Catatan:*\\n${formData.notes}` : ''}
 
 ━━━━━━━━━━━━━━━━━━━
 Mohon konfirmasi ketersediaan lapangan. Terima kasih! 🙏
-            `.trim();
+    `.trim();
 
-            const waURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-            window.open(waURL, '_blank');
-            alert('Anda akan diarahkan ke WhatsApp untuk konfirmasi reservasi!');
-        });
+    // 4. Buka WhatsApp
+    const waURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    window.open(waURL, '_blank');
+    
+    // Beri notifikasi ke user
+    alert('Anda akan diarahkan ke WhatsApp untuk konfirmasi reservasi!');
+    
+    // Reset Formulir (Opsional)
+    document.getElementById('reservationForm').reset();
+    // if (typeof resetPrice === 'function') { resetPrice(); } // Jika ada fungsi reset harga
 
+});
+
+// ... (Bagian lain dari script.js tetap sama)
         // Phone formatting
         document.getElementById('phone').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
