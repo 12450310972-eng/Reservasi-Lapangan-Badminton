@@ -112,7 +112,6 @@
             slot.textContent = time;
             slot.dataset.time = time;
             slot.onclick = () => selectTimeSlot(slot);
-            slot.style.cssText = 'padding: 1rem; background: var(--light-gray); border: 2px solid var(--light-gray); border-radius: 10px; text-align: center; cursor: pointer; transition: all 0.3s; font-weight: 600;';
             timeSlotsContainer.appendChild(slot);
         });
 
@@ -125,13 +124,10 @@
         let selectedCourt = null;
         function selectCourt(courtCard) {
             document.querySelectorAll('.court-card').forEach(card => {
-                card.style.border = '2px solid var(--light-gray)';
-                card.style.background = 'var(--light-gray)';
+                card.classList.remove('selected');
             });
             
-            courtCard.style.border = '2px solid var(--primary-blue)';
-            courtCard.style.background = 'linear-gradient(135deg, var(--secondary-blue) 0%, var(--light-gray) 100%)';
-            courtCard.style.boxShadow = '0 5px 25px var(--glow-blue)';
+            courtCard.classList.add('selected');
             
             selectedCourt = courtCard.dataset.court;
             document.getElementById('selectedCourt').value = selectedCourt;
@@ -149,14 +145,9 @@
         let selectedSlot = null;
         function selectTimeSlot(slot) {
             if (selectedSlot) {
-                selectedSlot.style.background = 'var(--light-gray)';
-                selectedSlot.style.border = '2px solid var(--light-gray)';
-                selectedSlot.style.color = 'var(--white)';
+                selectedSlot.classList.remove('selected');
             }
-            slot.style.background = 'var(--primary-blue)';
-            slot.style.border = '2px solid var(--primary-blue)';
-            slot.style.color = 'var(--white)';
-            slot.style.boxShadow = '0 5px 20px var(--glow-blue)';
+            slot.classList.add('selected');
             selectedSlot = slot;
             document.getElementById('selectedTime').value = slot.dataset.time;
             calculatePrice();
